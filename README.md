@@ -44,7 +44,7 @@ All the above constraints help you build a truly RESTful API, and you should fol
 
 ![Maturity Model Pyramid](https://martinfowler.com/articles/images/richardsonMaturityModel/overview.png)
 
-Is a way to measure how mature is your REST Api based on 4 models, from 0 to 4. I'd like to encourage this is not a standard. In fact, there is no standard defined to say if a REST Api is good enough or not. But the truth is, the Richardson Maturity Model was quickly adopted by the IT Industry, at least ot have "something to follow" to let you know you're doing well
+Is a way to measure how mature is your REST Api based on 4 models, from 0 to 4. I'd like to encourage this is not a standard. In fact, there is no standard defined to say if a REST Api is good enough or not. But the truth is, the Richardson Maturity Model was quickly adopted by the IT Industry, at least to have "something to follow" to let you know you're doing well
 
 
 #### Level 0:
@@ -167,7 +167,7 @@ curl -d '{"newCar":{"id":"abc-def-ghi","brand":"jkl-mn-opq","model":"New Model t
 curl -d '{"updatedCar":{"brand":"rst-abc-xyz","model":"Just renamed the model"}}' -H "Content-Type: application/json" -X PUT http://server:port/v1/cars/abc-def-ghi
 ```
 
-  * *GET:* Use this verb for read only operations. Like Reading a single resource (GET /cars/{id}) or a collection (GET /cars) or when a search is executed (GET /cars/search?color=red&engine=1.6). *Do not put anything as part of the body payload since GET must be cacheable, use always query params*
+  * *GET:* Use this verb for read-only operations. Like Reading a single resource (GET /cars/{id}) or a collection (GET /cars) or when a search is executed (GET /cars/search?color=red&engine=1.6). *Do not put anything as part of the body payload since GET must be cacheable, use always query params*
   
   * *DELETE:* To delete a whole resource. Example: DELETE /cars/{id}
 
@@ -236,9 +236,9 @@ As it is shown in some examples above, the id of the resource is heavily used in
 * /cars/6dd7f186-1ecb-11ed-861d-0242ac120002 ✅
   * This is a hard guessing id, since even if the id gets changed at URI it would be hard to know a new valid id
 * /cars/112 :x:
-  * This is wrong since a potential hacker could guess the id is autoincremental, and it could easily change the URL in order to check "what if I request 113 or 114"?
+  * This is wrong since a potential hacker could guess the id is auto-incrementing, and it could easily change the URL in order to check "what if I request 113 or 114"?
 
-Finally, again don't mix up concepts. The way of modelling the API must be agnostic from data sources and so on. Don't think in the id like if it were your primary key of a table in a database. The table in the database could have its own primary key (autoincremental) but as a private one. The only thing you need to consider is to have a public way to fetch/update/delete resources.
+Finally, again don't mix up concepts. The way of modelling the API must be agnostic from data sources and so on. Don't think in the id like if it were your primary key of a table in a database. The table in the database could have its own primary key (autoincrement) but as a private one. The only thing you need to consider is to have a public way to fetch/update/delete resources.
 
 Consider to use UUID for that purpose. Here you have some readings about it:
 
@@ -248,7 +248,7 @@ Consider to use UUID for that purpose. Here you have some readings about it:
 
 ### Consider using pagination when heavy load of data is expected (Search endpoints)
 
-Sometime is fine to retrieve a whole collection of resources, to perform later filtering/sorting at client side. This approach is fine when you don't expect a heavy load of data. But when so much data is expected, like historic data, there is a big risk of killing the backend side, in order to receive requests that are hard to process.
+Sometimes is fine to retrieve a whole collection of resources, to perform later filtering/sorting at client side. This approach is fine when you don't expect a heavy load of data. But when so much data is expected, like historic data, there is a big risk of killing the backend side, in order to receive requests that are hard to process.
 
 So then, consider to use pagination at server side. Here you have a running example at [this repo](https://github.com/geeksusma/search-endpoint-example)
 
@@ -273,7 +273,7 @@ The thing is, if just have a single "car" resource modelled in just one way, pro
 * GET /cars ➡️ can return a Car object, fully detailed
 * GET /offroads ➡️ will return also cars, since a Offroad is a type of car, but modelled as an Offroad object, which has a different set of fields/attributes
 
-Similar thing when you have a custom model for creating/updating a resource (a car) probably the data needed to create a generic car is different than the data needed to create a offroad. And even the data needed to update a whole resource probably is different than the data needed to create the resource.
+Similar thing when you have a custom model for creating/updating a resource (a car) probably the data needed to create a generic car is different than the data needed to create an offroad. And even the data needed to update a whole resource probably is different than the data needed to create the resource.
 
 So then is fine to have:
 
@@ -342,11 +342,10 @@ At least try to follow:
 - Adapt API versioning to business requirements
 - Put API security considerations at the forefront
 
-Keep in mind, in the most of the cases, you'll start with the version 1 of your API, and it will never be changed. Only create a new version when a breaking change is introduced. For example:
+Keep in mind, in most cases, you'll start with version 1 of your API, and it will never be changed. Only create a new version when a breaking change is introduced. For example:
 
 - A change in the format of the response data could break a caller
 - A change in types used for requesting/response data (changing an integer to a float)
 - Removing any part of the API
 
 Non-breaking changes, such as adding new endpoints or new response parameters, do not require a change to the major version number.
-
